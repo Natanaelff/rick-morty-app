@@ -1,0 +1,20 @@
+# E2E: favoritar pela lista e ver o personagem no filtro de favoritos.
+# appId iOS por padrão; para Android use: com.rickmortyexplorer
+appId: org.reactjs.native.example.RickMortyExplorer
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: "character-card-.*"
+    timeout: 20000
+# Favorita o Rick Sanchez (id 1) direto no card.
+- tapOn:
+    id: "card-favorite-1"
+# Liga o filtro "somente favoritos" no header.
+- tapOn:
+    id: "favorites-filter-toggle"
+- extendedWaitUntil:
+    visible: "Rick Sanchez"
+    timeout: 10000
+- assertNotVisible: "Morty Smith"

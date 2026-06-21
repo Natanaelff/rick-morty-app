@@ -1,0 +1,10 @@
+schema: https://rickandmortyapi.com/graphql
+documents: 'src/graphql/queries.ts'
+generates:
+  src/graphql/generated/types.ts:
+    plugins:
+      - typescript-operations
+    config:
+      scalars:
+        ID: string
+      preResolveTypes: true

@@ -1,0 +1,18 @@
+# E2E: busca com debounce filtra a lista por nome.
+# appId iOS por padrão; para Android use: com.rickmortyexplorer
+appId: org.reactjs.native.example.RickMortyExplorer
+---
+- launchApp:
+    clearState: true
+# Espera a primeira página carregar da API.
+- extendedWaitUntil:
+    visible: "Rick Sanchez"
+    timeout: 30000
+- tapOn:
+    id: "search-input"
+- inputText: "Morty"
+# Aguarda o debounce (500ms) + resposta da API.
+- extendedWaitUntil:
+    visible: "Morty Smith"
+    timeout: 30000
+- assertNotVisible: "Summer Smith"

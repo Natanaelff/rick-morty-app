@@ -1,0 +1,27 @@
+# E2E: aplicar filtro por status (Dead) e ver a lista filtrada.
+# appId iOS por padrão; para Android use: com.rickmortyexplorer
+appId: org.reactjs.native.example.RickMortyExplorer
+---
+- launchApp:
+    clearState: true
+# Espera a lista carregar (testID é mais estável que texto p/ rede lenta).
+- extendedWaitUntil:
+    visible:
+      id: "character-card-.*"
+    timeout: 30000
+- tapOn:
+    id: "filter-button"
+# Chips usam testID (independem do idioma). Espera o modal abrir.
+- extendedWaitUntil:
+    visible:
+      id: "chip-status-dead"
+    timeout: 10000
+- tapOn:
+    id: "chip-status-dead"
+- tapOn:
+    id: "filter-apply"
+# A lista volta a renderizar com resultados após o filtro aplicado.
+- extendedWaitUntil:
+    visible:
+      id: "character-card-.*"
+    timeout: 30000

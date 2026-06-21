@@ -1,0 +1,62 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "empty": "No characters found.",
+    "favorites": "Favorites",
+    "search_placeholder": "Search characters by name...",
+    "back": "Back"
+  },
+  "filter": {
+    "title": "Filters",
+    "apply": "Apply Filters",
+    "clear": "Clear Filters",
+    "status": "Status",
+    "gender": "Gender",
+    "species": "Species",
+    "alive": "Alive",
+    "dead": "Dead",
+    "unknown": "Unknown",
+    "female": "Female",
+    "male": "Male",
+    "genderless": "Genderless",
+    "species_placeholder": "E.g. Human, Alien..."
+  },
+  "details": {
+    "title": "Details",
+    "episodes": "Episodes",
+    "origin": "Origin",
+    "location": "Location",
+    "status": "Status",
+    "gender": "Gender",
+    "species": "Species",
+    "type": "Type",
+    "unknown_type": "None"
+  },
+  "values": {
+    "status": {
+      "alive": "Alive",
+      "dead": "Dead",
+      "unknown": "Unknown"
+    },
+    "gender": {
+      "female": "Female",
+      "male": "Male",
+      "genderless": "Genderless",
+      "unknown": "Unknown"
+    },
+    "species": {
+      "human": "Human",
+      "alien": "Alien",
+      "humanoid": "Humanoid",
+      "robot": "Robot",
+      "animal": "Animal",
+      "cronenberg": "Cronenberg",
+      "disease": "Disease",
+      "mythological creature": "Mythological Creature",
+      "poopybutthole": "Poopybutthole",
+      "unknown": "Unknown"
+    }
+  }
+}

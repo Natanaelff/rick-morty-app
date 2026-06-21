@@ -1,0 +1,62 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Ocorreu um erro.",
+    "retry": "Tentar novamente",
+    "empty": "Nenhum personagem encontrado.",
+    "favorites": "Favoritos",
+    "search_placeholder": "Buscar personagens por nome...",
+    "back": "Voltar"
+  },
+  "filter": {
+    "title": "Filtros",
+    "apply": "Aplicar Filtros",
+    "clear": "Limpar Filtros",
+    "status": "Status",
+    "gender": "Gênero",
+    "species": "Espécie",
+    "alive": "Vivo",
+    "dead": "Morto",
+    "unknown": "Desconhecido",
+    "female": "Feminino",
+    "male": "Masculino",
+    "genderless": "Sem gênero",
+    "species_placeholder": "Ex: Humano, Alien..."
+  },
+  "details": {
+    "title": "Detalhes",
+    "episodes": "Episódios",
+    "origin": "Origem",
+    "location": "Localização",
+    "status": "Status",
+    "gender": "Gênero",
+    "species": "Espécie",
+    "type": "Tipo",
+    "unknown_type": "Nenhum"
+  },
+  "values": {
+    "status": {
+      "alive": "Vivo",
+      "dead": "Morto",
+      "unknown": "Desconhecido"
+    },
+    "gender": {
+      "female": "Feminino",
+      "male": "Masculino",
+      "genderless": "Sem gênero",
+      "unknown": "Desconhecido"
+    },
+    "species": {
+      "human": "Humano",
+      "alien": "Alienígena",
+      "humanoid": "Humanoide",
+      "robot": "Robô",
+      "animal": "Animal",
+      "cronenberg": "Cronenberg",
+      "disease": "Doença",
+      "mythological creature": "Criatura mitológica",
+      "poopybutthole": "Poopybutthole",
+      "unknown": "Desconhecido"
+    }
+  }
+}
