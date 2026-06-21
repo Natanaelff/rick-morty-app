@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled, { useTheme } from 'styled-components/native';
 import Ionicons from '../../atoms/Icon';
 import { useTranslation } from 'react-i18next';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+
+const styles = StyleSheet.create({
+  chipLabel: { fontWeight: 'bold' },
+});
 
 // In-tree overlay (não usamos o <Modal> do RN: no iOS ele renderiza numa janela
 // nativa separada que ferramentas de e2e/acessibilidade não enxergam).
@@ -199,7 +204,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                       <Text
                         variant="caption"
                         color={status.toLowerCase() === opt.value ? theme.colors.background : theme.colors.textPrimary}
-                        style={{ fontWeight: 'bold' }}
+                        style={styles.chipLabel}
                         noMargin
                       >
                         {opt.label}
@@ -223,7 +228,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                       <Text
                         variant="caption"
                         color={gender.toLowerCase() === opt.value ? theme.colors.background : theme.colors.textPrimary}
-                        style={{ fontWeight: 'bold' }}
+                        style={styles.chipLabel}
                         noMargin
                       >
                         {opt.label}

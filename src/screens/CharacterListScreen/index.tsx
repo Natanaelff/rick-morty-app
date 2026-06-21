@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect, useMemo } from 'react';
-import { FlatList, RefreshControl, TouchableOpacity, View } from 'react-native';
+import React, { useState, useLayoutEffect, useMemo, useCallback } from 'react';
+import { FlatList, RefreshControl, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client/react';
 import { NetworkStatus } from '@apollo/client';
@@ -22,6 +22,16 @@ import FilterModal from '../../components/organisms/FilterModal';
 import Text from '../../components/atoms/Text';
 import Button from '../../components/atoms/Button';
 import LoadingSpinner from '../../components/atoms/LoadingSpinner';
+
+const styles = StyleSheet.create({
+  langText: { fontWeight: 'bold' },
+  badgeCount: { fontSize: 11, fontWeight: '800', lineHeight: 13, textAlign: 'center' },
+  footerLoading: { paddingVertical: 20 },
+  errorTitle: { marginTop: 16, marginBottom: 8 },
+  errorBody: { marginBottom: 24 },
+  emptyTitle: { marginTop: 16 },
+  listContent: { flexGrow: 1, paddingBottom: 8 },
+});
 
 const Container = styled.View`
   flex: 1;
@@ -108,7 +118,7 @@ export const CharacterListScreen: React.FC = () => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { isDark, setThemeMode, themeMode } = useAppTheme();
+  const { isDark, setThemeMode } = useAppTheme();
 
   // Search & Filters State
   const [searchQuery, setSearchQuery] = useState('');
@@ -156,20 +166,21 @@ export const CharacterListScreen: React.FC = () => {
     loading && characters.length === 0 && !isLoadingMore && !isRefreshing;
 
   // Change App Language (Toggle PT-BR / EN-US)
-  const toggleLanguage = () => {
+  const toggleLanguage = useCallback(() => {
     const nextLang = i18n.language.startsWith('pt') ? 'en' : 'pt';
     i18n.changeLanguage(nextLang);
-  };
+  }, [i18n]);
 
   // Setup Header navigation buttons
   useLayoutEffect(() => {
     navigation.setOptions({
       title: showFavoritesOnly ? t('common.favorites') : 'Rick & Morty',
+      // eslint-disable-next-line react/no-unstable-nested-components -- render fn exigida pela API headerRight do React Navigation
       headerRight: () => (
         <HeaderIconsContainer>
           {/* Language Toggle */}
           <LanguageButton onPress={toggleLanguage} activeOpacity={0.7}>
-            <Text variant="caption" style={{ fontWeight: 'bold', color: theme.colors.primary }} noMargin>
+            <Text variant="caption" color={theme.colors.primary} style={styles.langText} noMargin>
               {i18n.language.startsWith('pt') ? 'EN' : 'PT'}
             </Text>
           </LanguageButton>
@@ -203,13 +214,8 @@ export const CharacterListScreen: React.FC = () => {
                   <Text
                     variant="caption"
                     noMargin
-                    style={{
-                      fontSize: 11,
-                      fontWeight: '800',
-                      lineHeight: 13,
-                      textAlign: 'center',
-                      color: theme.colors.white,
-                    }}
+                    color={theme.colors.white}
+                    style={styles.badgeCount}
                   >
                     {favorites.length > 99 ? '99+' : favorites.length}
                   </Text>
@@ -220,7 +226,17 @@ export const CharacterListScreen: React.FC = () => {
         </HeaderIconsContainer>
       ),
     });
-  }, [navigation, showFavoritesOnly, favorites.length, isDark, themeMode, i18n.language, t]);
+  }, [
+    navigation,
+    showFavoritesOnly,
+    favorites.length,
+    isDark,
+    theme,
+    setThemeMode,
+    toggleLanguage,
+    i18n.language,
+    t,
+  ]);
 
   const handleRefresh = () => {
     if (showFavoritesOnly) return;
@@ -247,7 +263,7 @@ export const CharacterListScreen: React.FC = () => {
   const renderFooter = () => {
     if (isLoadingMore) {
       return (
-        <View style={{ paddingVertical: 20 }}>
+        <View style={styles.footerLoading}>
           <LoadingSpinner fullScreen={false} size="small" />
         </View>
       );
@@ -261,10 +277,10 @@ export const CharacterListScreen: React.FC = () => {
       <ScreenContainer>
         <CenterContainer>
           <Icon name="alert-circle" size={64} color={theme.colors.error} />
-          <Text variant="subtitle" style={{ marginTop: 16, marginBottom: 8 }} align="center">
+          <Text variant="subtitle" style={styles.errorTitle} align="center">
             {t('common.error')}
           </Text>
-          <Text variant="body" color={theme.colors.textSecondary} style={{ marginBottom: 24 }} align="center">
+          <Text variant="body" color={theme.colors.textSecondary} style={styles.errorBody} align="center">
             {error.message}
           </Text>
           <Button title={t('common.retry')} onPress={handleRefresh} />
@@ -278,6 +294,17 @@ export const CharacterListScreen: React.FC = () => {
       <Container>
         {/* Search and Filters Header */}
         <SearchRow>
+          <ViewToggleButton
+            testID="view-toggle"
+            onPress={() => setViewMode((m) => (m === 'list' ? 'grid' : 'list'))}
+            activeOpacity={0.7}
+          >
+            <Icon
+              name={viewMode === 'list' ? 'grid-outline' : 'list-outline'}
+              size={20}
+              color={theme.colors.textPrimary}
+            />
+          </ViewToggleButton>
           <SearchBarWrapper>
             <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
           </SearchBarWrapper>
@@ -293,17 +320,6 @@ export const CharacterListScreen: React.FC = () => {
               color={isFilteringActive ? theme.colors.background : theme.colors.textPrimary}
             />
           </FilterButton>
-          <ViewToggleButton
-            testID="view-toggle"
-            onPress={() => setViewMode((m) => (m === 'list' ? 'grid' : 'list'))}
-            activeOpacity={0.7}
-          >
-            <Icon
-              name={viewMode === 'list' ? 'grid-outline' : 'list-outline'}
-              size={20}
-              color={theme.colors.textPrimary}
-            />
-          </ViewToggleButton>
         </SearchRow>
 
         {/* Characters FlatList */}
@@ -329,11 +345,11 @@ export const CharacterListScreen: React.FC = () => {
                 }
               />
             )}
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 8 }}
+            contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <CenterContainer>
                 <Icon name="search" size={48} color={theme.colors.textSecondary} />
-                <Text variant="subtitle" style={{ marginTop: 16 }} align="center">
+                <Text variant="subtitle" style={styles.emptyTitle} align="center">
                   {t('common.empty')}
                 </Text>
               </CenterContainer>

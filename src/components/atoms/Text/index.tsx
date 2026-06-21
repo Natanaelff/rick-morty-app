@@ -10,7 +10,7 @@ interface TextProps {
 }
 
 export const Text = styled.Text<TextProps>`
-  color: ${({ theme, color }) => color || theme.colors.textPrimary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   text-align: ${({ align }) => align || 'left'};
   
   ${({ noMargin }) => noMargin && css`
@@ -63,6 +63,8 @@ export const Text = styled.Text<TextProps>`
         `;
     }
   }}
+
+  ${({ color }) => color && css`color: ${color};`}
 `;
 
 export default Text;

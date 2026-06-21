@@ -20,7 +20,7 @@ interface LoadingSpinnerProps extends ActivityIndicatorProps {
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ fullScreen, size = 'large', ...props }) => {
   if (fullScreen) {
     return (
-      <Container style={{ flex: 1 }}>
+      <Container>
         <Spinner size={size} {...props} />
       </Container>
     );

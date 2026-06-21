@@ -1,6 +1,11 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
+
+const styles = StyleSheet.create({
+  label: { fontWeight: '700', fontSize: 11, letterSpacing: 0.3 },
+});
 
 interface BadgeProps {
   status: 'Alive' | 'Dead' | 'unknown' | string;
@@ -58,7 +63,7 @@ export const Badge: React.FC<BadgeProps> = ({ status, text }) => {
       borderColor={hexToRgba(color, '0.35')}
     >
       <StatusDot dotColor={color} />
-      <Text variant="caption" color={color} noMargin style={{ fontWeight: '700', fontSize: 11, letterSpacing: 0.3 }}>
+      <Text variant="caption" color={color} noMargin style={styles.label}>
         {text}
       </Text>
     </BadgeContainer>

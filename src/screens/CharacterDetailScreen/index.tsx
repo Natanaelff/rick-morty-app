@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { FlatList, View, TouchableOpacity } from 'react-native';
+import { FlatList, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client/react';
 import styled, { useTheme } from 'styled-components/native';
@@ -18,6 +18,13 @@ import Button from '../../components/atoms/Button';
 import Badge from '../../components/atoms/Badge';
 import LoadingSpinner from '../../components/atoms/LoadingSpinner';
 import EpisodeListItem from '../../components/molecules/EpisodeListItem';
+
+const styles = StyleSheet.create({
+  errorTitle: { marginTop: 16, marginBottom: 8 },
+  errorBody: { marginBottom: 24 },
+  infoValueRight: { maxWidth: '60%', textAlign: 'right' },
+  episodesContent: { paddingBottom: 30 },
+});
 
 const HeaderContainer = styled.View`
   align-items: center;
@@ -111,6 +118,7 @@ export const CharacterDetailScreen: React.FC = () => {
     if (character) {
       const fav = isFavorite(character.id ?? '');
       navigation.setOptions({
+        // eslint-disable-next-line react/no-unstable-nested-components -- render fn exigida pela API headerRight do React Navigation
         headerRight: () => (
           <TouchableOpacity
             testID="detail-favorite-button"
@@ -141,10 +149,10 @@ export const CharacterDetailScreen: React.FC = () => {
       <ScreenContainer>
         <CenterContainer>
           <Icon name="alert-circle" size={64} color={theme.colors.error} />
-          <Text variant="subtitle" style={{ marginTop: 16, marginBottom: 8 }} align="center">
+          <Text variant="subtitle" style={styles.errorTitle} align="center">
             {t('common.error')}
           </Text>
-          <Text variant="body" color={theme.colors.textSecondary} style={{ marginBottom: 24 }} align="center">
+          <Text variant="body" color={theme.colors.textSecondary} style={styles.errorBody} align="center">
             {error.message}
           </Text>
           <Button title={t('common.retry')} onPress={() => refetch()} />
@@ -202,7 +210,7 @@ export const CharacterDetailScreen: React.FC = () => {
             <Text variant="label" noMargin>
               {t('details.origin')}
             </Text>
-            <Text variant="bold" noMargin style={{ maxWidth: '60%', textAlign: 'right' }} numberOfLines={1}>
+            <Text variant="bold" noMargin style={styles.infoValueRight} numberOfLines={1}>
               {character.origin?.name || t('filter.unknown')}
             </Text>
           </InfoRow>
@@ -210,7 +218,7 @@ export const CharacterDetailScreen: React.FC = () => {
             <Text variant="label" noMargin>
               {t('details.location')}
             </Text>
-            <Text variant="bold" noMargin style={{ maxWidth: '60%', textAlign: 'right' }} numberOfLines={1}>
+            <Text variant="bold" noMargin style={styles.infoValueRight} numberOfLines={1}>
               {character.location?.name || t('filter.unknown')}
             </Text>
           </InfoRowLast>
@@ -232,7 +240,7 @@ export const CharacterDetailScreen: React.FC = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <EpisodeListItem episode={item} />}
           ListHeaderComponent={renderHeader}
-          contentContainerStyle={{ paddingBottom: 30 }}
+          contentContainerStyle={styles.episodesContent}
           showsVerticalScrollIndicator={false}
         />
       </ListWrapper>

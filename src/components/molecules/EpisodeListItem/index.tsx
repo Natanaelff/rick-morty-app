@@ -1,7 +1,13 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import Text from '../../atoms/Text';
+
+const styles = StyleSheet.create({
+  code: { fontWeight: 'bold' },
+  date: { marginTop: 2 },
+});
 
 // Air dates come from the API as English strings (e.g. "December 2, 2013").
 // Render them in the active locale, falling back to the raw value if the
@@ -62,7 +68,7 @@ export const EpisodeListItem: React.FC<EpisodeListItemProps> = ({ episode }) => 
   return (
     <Container>
       <CodeBadge>
-        <Text variant="caption" color={theme.colors.secondary} style={{ fontWeight: 'bold' }} noMargin>
+        <Text variant="caption" color={theme.colors.secondary} style={styles.code} noMargin>
           {episode.episode}
         </Text>
       </CodeBadge>
@@ -70,7 +76,7 @@ export const EpisodeListItem: React.FC<EpisodeListItemProps> = ({ episode }) => 
         <Text variant="bold" noMargin numberOfLines={1}>
           {episode.name}
         </Text>
-        <Text variant="caption" noMargin style={{ marginTop: 2 }}>
+        <Text variant="caption" noMargin style={styles.date}>
           {formatAirDate(episode.air_date, i18n.language)}
         </Text>
       </Info>
