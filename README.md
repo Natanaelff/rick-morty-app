@@ -5,37 +5,41 @@ App mobile em **React Native (CLI) + TypeScript** para explorar o universo de Ri
 ## Funcionalidades
 
 **Lista de personagens**
-- Listagem paginada com *infinite scroll* (paginação acumulada pelo cache do Apollo).
-- Busca por nome com *debounce* de 500ms.
-- Filtros por status, gênero e espécie em um *bottom sheet*.
+
+- Listagem paginada com _infinite scroll_ (paginação acumulada pelo cache do Apollo).
+- Busca por nome com _debounce_ de 500ms.
+- Filtros por status, gênero e espécie em um _bottom sheet_.
 - Alternância entre visualização em **lista** e **grade** (2 colunas).
-- *Pull-to-refresh* e estados claros de carregando, vazio e erro (com *retry*).
+- _Pull-to-refresh_ e estados claros de carregando, vazio e erro (com _retry_).
 
 **Detalhe do personagem**
+
 - Ficha completa: espécie, status, gênero, tipo, origem e localização.
 - Lista de todos os episódios em que o personagem aparece.
 
 **Favoritos**
+
 - Favoritar pela lista ou pelo detalhe; filtro rápido para ver só os favoritos.
 - Persistidos localmente (continuam após fechar o app).
 
 **Personalização**
+
 - Tema claro/escuro (padrão escuro), seguindo ou não o sistema.
 - Idioma PT-BR / EN-US.
 - Tema, idioma e modo de visualização são lembrados entre sessões.
 
 ## Stack
 
-| Camada | Tecnologia |
-|---|---|
-| Base | React Native CLI, TypeScript |
-| Dados | Apollo Client 4 + `graphql@16`, GraphQL Codegen (`TypedDocumentNode`) |
-| Navegação | React Navigation (Native Stack) |
-| UI | styled-components, react-native-vector-icons (Ionicons) |
-| i18n | i18next + react-i18next (chaves type-safe) |
-| Persistência | AsyncStorage |
-| Erros | Sentry (integrado ao React Navigation) |
-| Testes | Jest + React Native Testing Library, Maestro (e2e) |
+| Camada       | Tecnologia                                                            |
+| ------------ | --------------------------------------------------------------------- |
+| Base         | React Native CLI, TypeScript                                          |
+| Dados        | Apollo Client 4 + `graphql@16`, GraphQL Codegen (`TypedDocumentNode`) |
+| Navegação    | React Navigation (Native Stack)                                       |
+| UI           | styled-components, react-native-vector-icons (Ionicons)               |
+| i18n         | i18next + react-i18next (chaves type-safe)                            |
+| Persistência | AsyncStorage                                                          |
+| Erros        | Sentry (integrado ao React Navigation)                                |
+| Testes       | Jest + React Native Testing Library, Maestro (e2e)                    |
 
 ## Rodando localmente
 
@@ -79,10 +83,10 @@ O código segue **Atomic Design** (`atoms → molecules → organisms → templa
 Algumas decisões que valem o destaque:
 
 - **Tipos GraphQL gerados** (Codegen) e documentos `TypedDocumentNode` — `useQuery` retorna dados tipados. Os tipos anuláveis do schema são normalizados em `graphql/mappers.ts`, mantendo o restante do app livre de `any` e de checagens espalhadas.
-- **Paginação no cache do Apollo** via *field policy* (`merge` + `keyArgs`), acionada por `fetchMore` — sem manter uma cópia paralela das páginas em estado local.
-- **Resiliência de rede:** um `RetryLink` com *backoff* reexecuta requisições em falhas transitórias (ex.: rate-limit `429`) antes de cair na tela de erro.
+- **Paginação no cache do Apollo** via _field policy_ (`merge` + `keyArgs`), acionada por `fetchMore` — sem manter uma cópia paralela das páginas em estado local.
+- **Resiliência de rede:** um `RetryLink` com _backoff_ reexecuta requisições em falhas transitórias (ex.: rate-limit `429`) antes de cair na tela de erro.
 - **Filtro como overlay na própria árvore** em vez do `<Modal>` do RN — no iOS o `Modal` vive em uma janela nativa separada, fora do alcance de ferramentas de e2e e acessibilidade.
-- **Localização dos dados:** a API só responde em inglês, então valores de conjunto fixo (status, gênero, espécies comuns) e datas são traduzidos no cliente, com *fallback* ao valor original; nomes próprios permanecem intactos.
+- **Localização dos dados:** a API só responde em inglês, então valores de conjunto fixo (status, gênero, espécies comuns) e datas são traduzidos no cliente, com _fallback_ ao valor original; nomes próprios permanecem intactos.
 - **Acessibilidade/testabilidade:** `accessibilityLabel` nos cards e `testID`s estáveis em toda a UI interativa.
 
 ### Estrutura
