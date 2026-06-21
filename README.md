@@ -1,170 +1,104 @@
-# Rick & Morty Explorer 🧪📱
+# Rick & Morty Explorer
 
-Este é um aplicativo **React Native CLI puro (sem Expo)** com **TypeScript** que consome a API pública GraphQL do Rick and Morty. Desenvolvido seguindo as metodologias de **SDD (Spec Driven Development)**, **RPI (Research, Plan, Implement)** e **Atomic Design**.
+App mobile em **React Native (CLI) + TypeScript** para explorar o universo de Rick and Morty. Consome a API pública GraphQL ([rickandmortyapi.com](https://rickandmortyapi.com/graphql)) e permite navegar pelos personagens, buscar e filtrar, ver detalhes com episódios e montar uma lista de favoritos que sobrevive entre sessões.
 
-## 📋 Funcionalidades Implementadas
+## Funcionalidades
 
-### Tela 1 — Lista de Personagens
-* 🔄 **Listagem Paginada:** Infinite scroll gerenciado e otimizado com FlatList.
-* 🔍 **Busca com Debounce:** Caixa de busca que reduz chamadas desnecessárias à API (debounce de 500ms).
-* ⚙️ **Filtros Avançados:** Filtros por status (Vivo, Morto, Desconhecido), gênero e espécie através de uma folha/modal de filtros nativa e fluida.
-* ⚠️ **Tratamento de Estados:** Telas dedicadas e amigáveis para Loading, Erro (com botão de Retry/Tentar novamente) e lista vazia. Erros transitórios (ex.: HTTP 429) são reexecutados automaticamente pelo `RetryLink` do Apollo.
-* 📥 **Pull-to-refresh:** Recarrega a listagem de forma reativa.
-* 🔲 **Visualização Lista/Grade:** Botão na barra de busca alterna entre lista (1 coluna) e grade (2 colunas) — preferência persistida no `AsyncStorage`.
+**Lista de personagens**
+- Listagem paginada com *infinite scroll* (paginação acumulada pelo cache do Apollo).
+- Busca por nome com *debounce* de 500ms.
+- Filtros por status, gênero e espécie em um *bottom sheet*.
+- Alternância entre visualização em **lista** e **grade** (2 colunas).
+- *Pull-to-refresh* e estados claros de carregando, vazio e erro (com *retry*).
 
-### Tela 2 — Detalhe do Personagem
-* 👤 **Ficha do Personagem:** Foto grande, espécie, status, gênero, tipo, origem e última localização.
-* 🎬 **Lista de Episódios:** Lista otimizada com FlatList (evitando ScrollView aninhado) mostrando todos os episódios em que o personagem aparece.
+**Detalhe do personagem**
+- Ficha completa: espécie, status, gênero, tipo, origem e localização.
+- Lista de todos os episódios em que o personagem aparece.
 
-### ⭐ Favoritar Personagens (Persistência local)
-* ❤️ Botão de favoritar tanto no Card da listagem quanto no Cabeçalho de detalhes.
-* 💾 Estado global gerenciado via **Context API** e persistido entre sessões com o **AsyncStorage**.
-* 🔍 Possibilidade de filtrar a lista principal para exibir apenas os favoritos (com busca funcionando localmente sobre os favoritos).
+**Favoritos**
+- Favoritar pela lista ou pelo detalhe; filtro rápido para ver só os favoritos.
+- Persistidos localmente (continuam após fechar o app).
 
----
+**Personalização**
+- Tema claro/escuro (padrão escuro), seguindo ou não o sistema.
+- Idioma PT-BR / EN-US.
+- Tema, idioma e modo de visualização são lembrados entre sessões.
 
-## 🌟 Diferenciais Inclusos
+## Stack
 
-* 🧬 **GraphQL Codegen:** Tipos das operações gerados a partir do schema da API (`npm run codegen`). Os documentos são tipados com `TypedDocumentNode`, então `useQuery` retorna dados totalmente tipados — sem `as any`.
-* 📦 **Paginação idiomática do Apollo:** Infinite scroll via *field policy* (`merge`/`keyArgs`) no `InMemoryCache` + `fetchMore`, sem estado de paginação manual paralelo ao cache.
-* 🎯 **Ícones vetoriais reais:** `react-native-vector-icons` (Ionicons), com fontes vinculadas no iOS (`UIAppFonts`) e Android (`fonts.gradle`).
-* 🌐 **i18next (PT-BR & EN-US):** Tradução completa com detecção automática do idioma do aparelho e chaves estritamente **type-safe** no TypeScript.
-* 🎨 **styled-components (Dark/Light Mode):** ThemeProvider com tema escuro "portal" como padrão, suporte automático (sistema) e manual com persistência de escolha.
-* 💾 **Preferências persistidas:** tema, idioma e modo de visualização (lista/grade) sobrevivem entre sessões via `AsyncStorage` (hook genérico `usePersistedState`).
-* 🛡️ **Resiliência de rede:** `RetryLink` do Apollo com backoff exponencial + jitter recupera de erros transitórios (ex.: rate-limit 429).
-* 🐞 **Sentry:** Integração para rastreamento de erros e monitoramento de transações de telas integrada ao **React Navigation**.
-* 🧪 **Testes (unitários + e2e):** Jest + RNTL (`useDebounce`, `FavoritesContext`, render inicial) e **Maestro** (fluxos e2e de busca, favoritar e filtro em `.maestro/`).
+| Camada | Tecnologia |
+|---|---|
+| Base | React Native CLI, TypeScript |
+| Dados | Apollo Client 4 + `graphql@16`, GraphQL Codegen (`TypedDocumentNode`) |
+| Navegação | React Navigation (Native Stack) |
+| UI | styled-components, react-native-vector-icons (Ionicons) |
+| i18n | i18next + react-i18next (chaves type-safe) |
+| Persistência | AsyncStorage |
+| Erros | Sentry (integrado ao React Navigation) |
+| Testes | Jest + React Native Testing Library, Maestro (e2e) |
 
----
+## Rodando localmente
 
-## 🏗️ Estrutura do Projeto (Atomic Design)
+**Pré-requisitos:** Node `>= 22`, Watchman (macOS) e o ambiente do [React Native CLI](https://reactnative.dev/docs/environment-setup) configurado.
 
-```
-docs/
-  └── specs/                # Specs no protocolo RPI (4 arquivos: .r / .p / .config / .i)
-src/
-  ├── @types/               # Declarações globais TypeScript (i18n, styled-components)
-  ├── assets/               # Imagens e ícones
-  ├── components/           # Componentes baseados em Atomic Design
-  │   ├── atoms/            # Elementos puros (Text, Button, Badge, LoadingSpinner, IoniconsMock)
-  │   ├── molecules/        # Grupos de átomos (SearchBar, CharacterCard, EpisodeListItem)
-  │   ├── organisms/        # Organismos funcionais (FilterModal)
-  │   └── templates/        # Estruturas de layouts de página (ScreenContainer)
-  ├── graphql/              # Apollo Client e Queries GraphQL
-  ├── i18n/                 # Dicionários e configurações de idiomas (PT-BR, EN-US)
-  ├── navigation/           # Configuração de rotas de telas com React Navigation e Sentry
-  ├── screens/              # Telas da aplicação (CharacterList, CharacterDetail)
-  ├── store/                # Provedores de estado (FavoritesContext, ThemeContext)
-  ├── theme/                # Definições de cores e tamanhos de temas
-  └── utils/                # Hooks e funções utilitárias (useDebounce)
-```
-
----
-
-## 🚀 Como Rodar o Projeto
-
-### Pré-requisitos
-* Node.js (versão recomendada: >= 22)
-* Watchman (para macOS)
-* Ambiente iOS/Android configurado para React Native CLI puro ([Guia de Configuração](https://reactnative.dev/docs/environment-setup))
-
-### Passo a Passo
-
-1. **Clonar e acessar o diretório do projeto:**
-   ```bash
-   cd rick-morty-explorer
-   ```
-
-2. **Instalar as dependências:**
-   ```bash
-   npm install
-   ```
-
-3. **(Opcional) Regenerar os tipos GraphQL a partir do schema da API:**
-   ```bash
-   npm run codegen
-   ```
-   > Os tipos já vêm versionados em `src/graphql/generated/`; rode apenas se alterar as queries.
-
-4. **Vincular as fontes dos ícones (react-native-vector-icons):**
-   ```bash
-   npx react-native-asset
-   ```
-   > No iOS as fontes também são copiadas pelo `pod install`; no Android o `fonts.gradle` já faz o bundling no build.
-
-5. **Instalar dependências nativas do iOS (se estiver no macOS e rodando para iOS):**
-   ```bash
-   cd ios && pod install && cd ..
-   ```
-
-6. **Executar o Metro Bundler (Servidor de Desenvolvimento):**
-   ```bash
-   npm run start
-   ```
-
-7. **Iniciar a aplicação no emulador/dispositivo:**
-   * **Android:**
-     ```bash
-     npm run android
-     ```
-   * **iOS:**
-     ```bash
-     npm run ios
-     ```
-
-### 🧪 Executando os Testes
-
-**Unitários (Jest + RNTL):**
 ```bash
+# 1. Dependências
+npm install
+
+# 2. iOS — pods (inclui as fontes dos ícones)
+cd ios && pod install && cd ..
+
+# 3. Metro (em um terminal)
+npm run start
+
+# 4. Build & run (em outro terminal)
+npm run ios       # ou: npm run android
+```
+
+> As fontes do `react-native-vector-icons` são empacotadas pelo CocoaPods (iOS) e via `assets/fonts` (Android). Se precisar revincular: `npx react-native-asset`.
+> Os tipos GraphQL já vêm versionados em `src/graphql/generated/`; para regerar a partir do schema: `npm run codegen`.
+
+## Testes
+
+```bash
+# Unitários (hooks, contexto de favoritos, render inicial)
 npm run test
-```
 
-**E2E (Maestro):**
-
-Os fluxos ficam em `.maestro/` (busca, favoritar, filtro). Requer o [Maestro CLI](https://maestro.mobile.dev/getting-started/installing-maestro) instalado e o app rodando no simulador/emulador.
-
-```bash
-# 1. Suba o app no simulador (em outra aba)
-npm run ios          # ou: npm run android
-
-# 2. Rode os fluxos e2e
+# E2E — fluxos de busca, favoritar e filtro
+#   requer o app rodando no simulador e o Maestro CLI instalado
+#   (https://maestro.mobile.dev)
 npm run test:e2e
 ```
 
-> Os flows usam o `appId` do iOS por padrão (`org.reactjs.native.example.RickMortyExplorer`). Para Android, troque o `appId` no topo dos arquivos `.maestro/*.yaml` para `com.rickmortyexplorer`.
+> Os fluxos Maestro ficam em `.maestro/` e usam o `appId` do iOS por padrão. Para Android, ajuste o `appId` no topo dos arquivos `.maestro/*.yaml` para `com.rickmortyexplorer`.
 
----
+## Arquitetura & decisões
 
-## ✅ Resumo de Verificação
+O código segue **Atomic Design** (`atoms → molecules → organisms → templates → screens`), separando rede/estado de servidor (Apollo), estado local (Context + AsyncStorage) e apresentação (styled-components).
 
-| Verificação | Comando | Status |
-|---|---|---|
-| Tipagem estática | `npx tsc --noEmit` | 0 erros |
-| Testes unitários | `npm run test` | 7/7 (Jest + RNTL) |
-| Testes e2e | `npm run test:e2e` | 3/3 flows (Maestro) |
-| Instalação | `npm install` | sem `--legacy-peer-deps` |
+Algumas decisões que valem o destaque:
 
-## 🧭 Decisões Técnicas (resumo)
+- **Tipos GraphQL gerados** (Codegen) e documentos `TypedDocumentNode` — `useQuery` retorna dados tipados. Os tipos anuláveis do schema são normalizados em `graphql/mappers.ts`, mantendo o restante do app livre de `any` e de checagens espalhadas.
+- **Paginação no cache do Apollo** via *field policy* (`merge` + `keyArgs`), acionada por `fetchMore` — sem manter uma cópia paralela das páginas em estado local.
+- **Resiliência de rede:** um `RetryLink` com *backoff* reexecuta requisições em falhas transitórias (ex.: rate-limit `429`) antes de cair na tela de erro.
+- **Filtro como overlay na própria árvore** em vez do `<Modal>` do RN — no iOS o `Modal` vive em uma janela nativa separada, fora do alcance de ferramentas de e2e e acessibilidade.
+- **Localização dos dados:** a API só responde em inglês, então valores de conjunto fixo (status, gênero, espécies comuns) e datas são traduzidos no cliente, com *fallback* ao valor original; nomes próprios permanecem intactos.
+- **Acessibilidade/testabilidade:** `accessibilityLabel` nos cards e `testID`s estáveis em toda a UI interativa.
 
-- **Tipagem GraphQL via Codegen** + `TypedDocumentNode` → zero `as any`; tipos anuláveis normalizados em `graphql/mappers.ts`.
-- **Paginação no cache do Apollo** (field policy `merge`/`keyArgs`) + `fetchMore`/`NetworkStatus`, sem estado manual paralelo.
-- **`RetryLink`** com backoff → resiliência a 429/erros transitórios.
-- **Filtro como overlay in-tree** (não `<Modal>` do RN) → testável no iOS e acessível.
-- **i18n** PT/EN type-safe, traduzindo também **valores da API** (status/gênero/espécie) e datas, com fallback ao original.
-- **Preferências persistidas** (tema, idioma, visualização lista/grade) via `AsyncStorage` (hook `usePersistedState`).
-- **Atomic Design**, tema dark "portal" como identidade, `testID`s + `accessibilityLabel` para testabilidade/acessibilidade.
-
-## 📄 Documentação (specs)
-
-As specs seguem o **protocolo RPI** (4 arquivos por feature) em `docs/specs/`:
+### Estrutura
 
 ```
-docs/specs/
-  ├── 00-stack.spec.md                              # contexto: pilha de tecnologia
-  ├── 00-architecture.spec.md                       # contexto: arquitetura e fluxos
-  └── 202606211236-rick-morty-explorer.{r,p,config,i}.spec.md
-        .r  → Research    (objetivo, user stories, regras, critérios)
-        .p  → Planning    (modelos, contratos GraphQL, componentes)
-        .config → Config  (constantes de infra, chaves AsyncStorage)
-        .i  → Implementing (checklist, lógica crítica, arquivos)
+src/
+├── @types/         # Declarações globais (i18n, styled-components)
+├── components/     # Atomic Design: atoms, molecules, organisms, templates
+├── graphql/        # client (links + cache), queries, generated/, mappers
+├── i18n/           # config, translateValue, locales (pt/en)
+├── navigation/     # Native Stack + tipos de rota
+├── screens/        # CharacterList, CharacterDetail
+├── store/          # FavoritesContext, ThemeContext
+└── utils/          # useDebounce, usePersistedState
 ```
+
+## Documentação
+
+As specs ficam em [`docs/specs/`](docs/specs/), no formato RPI (Research / Planning / Config / Implementing), com dois documentos de contexto (`00-stack`, `00-architecture`) que descrevem a pilha e a arquitetura do projeto.
