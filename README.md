@@ -49,14 +49,23 @@ App mobile em **React Native (CLI) + TypeScript** para explorar o universo de Ri
 # 1. Dependências
 npm install
 
-# 2. iOS — pods (inclui as fontes dos ícones)
-cd ios && pod install && cd ..
-
-# 3. Metro (em um terminal)
+# 2. Metro (deixe rodando em um terminal)
 npm run start
+```
 
-# 4. Build & run (em outro terminal)
-npm run ios       # ou: npm run android
+Em outro terminal, rode em uma das plataformas:
+
+**iOS** (macOS)
+
+```bash
+cd ios && pod install && cd ..   # uma vez / após mudar deps nativas (inclui as fontes dos ícones)
+npm run ios
+```
+
+**Android**
+
+```bash
+npm run android   # as fontes dos ícones são empacotadas no build via assets/fonts
 ```
 
 > As fontes do `react-native-vector-icons` são empacotadas pelo CocoaPods (iOS) e via `assets/fonts` (Android). Se precisar revincular: `npx react-native-asset`.
