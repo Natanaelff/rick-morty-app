@@ -1,0 +1,45 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#16203A"/>
+      <stop offset="60%" stop-color="#0B0F17"/>
+      <stop offset="100%" stop-color="#05070C"/>
+    </radialGradient>
+    <radialGradient id="portal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#EAFBD2"/>
+      <stop offset="22%" stop-color="#C7F58A"/>
+      <stop offset="48%" stop-color="#8CE05A"/>
+      <stop offset="78%" stop-color="#34D1E8"/>
+      <stop offset="100%" stop-color="#1B9FB8"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="46%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="45%" stop-color="#EAFBD2"/>
+      <stop offset="100%" stop-color="#A2E85B"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- subtle stars -->
+  <g fill="#E7ECF5" opacity="0.85">
+    <circle cx="180" cy="200" r="4"/>
+    <circle cx="840" cy="250" r="5"/>
+    <circle cx="760" cy="150" r="3"/>
+    <circle cx="250" cy="820" r="4"/>
+    <circle cx="850" cy="800" r="4"/>
+    <circle cx="160" cy="560" r="3"/>
+    <circle cx="900" cy="520" r="3"/>
+  </g>
+
+  <!-- portal -->
+  <g filter="url(#glow)">
+    <circle cx="512" cy="512" r="300" fill="url(#portal)"/>
+    <circle cx="512" cy="512" r="232" fill="#0B0F17" opacity="0.55"/>
+    <circle cx="512" cy="512" r="150" fill="url(#core)"/>
+  </g>
+</svg>

@@ -70,6 +70,7 @@ npm run android   # as fontes dos ícones são empacotadas no build via assets/f
 
 > As fontes do `react-native-vector-icons` são empacotadas pelo CocoaPods (iOS) e via `assets/fonts` (Android). Se precisar revincular: `npx react-native-asset`.
 > Os tipos GraphQL já vêm versionados em `src/graphql/generated/`; para regerar a partir do schema: `npm run codegen`.
+> O ícone do app é gerado de `assets/icon.svg` (iOS + Android); para regerar após editar o SVG: `npm run icons` (requer rebuild para aparecer).
 
 ## Testes
 

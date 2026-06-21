@@ -23,7 +23,18 @@ import Text from '../../components/atoms/Text';
 import Button from '../../components/atoms/Button';
 import LoadingSpinner from '../../components/atoms/LoadingSpinner';
 
+const PLACEHOLDER_ID = '__grid_placeholder__';
+const PLACEHOLDER_ITEM = {
+  id: PLACEHOLDER_ID,
+  name: '',
+  status: '',
+  species: '',
+  gender: '',
+  image: '',
+};
+
 const styles = StyleSheet.create({
+  gridPlaceholder: { flex: 1 },
   langText: { fontWeight: 'bold' },
   badgeCount: { fontSize: 11, fontWeight: '800', lineHeight: 13, textAlign: 'center' },
   footerLoading: { paddingVertical: 20 },
@@ -259,6 +270,14 @@ export const CharacterListScreen: React.FC = () => {
   const displayedCharacters = showFavoritesOnly ? getFilteredFavorites() : characters;
   const isFilteringActive = !!(status || gender || species);
 
+  // No grid (2 colunas), um número ímpar de itens deixaria o último card sozinho
+  // esticado na linha inteira. Um placeholder invisível mantém ele com meia largura.
+  const isGrid = viewMode === 'grid';
+  const listData =
+    isGrid && displayedCharacters.length % 2 === 1
+      ? [...displayedCharacters, { ...PLACEHOLDER_ITEM }]
+      : displayedCharacters;
+
   // Render Footer for Infinite Scroll Loading Indicator
   const renderFooter = () => {
     if (isLoadingMore) {
@@ -328,23 +347,26 @@ export const CharacterListScreen: React.FC = () => {
         ) : (
           <FlatList
             key={viewMode}
-            data={displayedCharacters}
+            data={listData}
             keyExtractor={(item) => item.id}
-            numColumns={viewMode === 'grid' ? 2 : 1}
-            columnWrapperStyle={
-              viewMode === 'grid' ? { gap: theme.spacing.md } : undefined
-            }
-            renderItem={({ item }) => (
-              <CharacterCard
-                character={item}
-                grid={viewMode === 'grid'}
-                isFavorite={isFavorite(item.id)}
-                onFavoriteToggle={() => toggleFavorite(item)}
-                onPress={() =>
-                  navigation.navigate('CharacterDetail', { id: item.id, name: item.name })
-                }
-              />
-            )}
+            numColumns={isGrid ? 2 : 1}
+            columnWrapperStyle={isGrid ? { gap: theme.spacing.md } : undefined}
+            renderItem={({ item }) => {
+              if (item.id === PLACEHOLDER_ID) {
+                return <View style={styles.gridPlaceholder} />;
+              }
+              return (
+                <CharacterCard
+                  character={item}
+                  grid={isGrid}
+                  isFavorite={isFavorite(item.id)}
+                  onFavoriteToggle={() => toggleFavorite(item)}
+                  onPress={() =>
+                    navigation.navigate('CharacterDetail', { id: item.id, name: item.name })
+                  }
+                />
+              );
+            }}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <CenterContainer>
