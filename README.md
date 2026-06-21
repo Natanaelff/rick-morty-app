@@ -1,6 +1,6 @@
 # Rick & Morty Explorer 🧪📱
 
-Este é um aplicativo **React Native CLI puro (sem Expo)** com **TypeScript** que consome a API pública GraphQL do Rick and Morty. Desenvolvido seguindo as metodologias de **SDD (Spec Driven Development)**, **RPI (Research, Plan, Implement)** e **Atomic Design**.
+Este é um aplicativo **React Native** com **TypeScript** que consome a API pública GraphQL do Rick and Morty. Desenvolvido seguindo as metodologias de **SDD (Spec Driven Development)**, **RPI (Research, Plan, Implement)** e **Atomic Design**.
 
 ## 📋 Funcionalidades Implementadas
 
